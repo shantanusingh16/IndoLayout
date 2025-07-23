@@ -1,14 +1,28 @@
-**IndoLayout: Leveraging Attention for Extended Indoor Layout Estimation from an RGB Image**  
-Shantanu Singh, Jaidev Shriram, Shaantanu Kulkarni, Brojeshwar Bhowmick, K. Madhava Krishna  
+<div align="center">
+<h1>Indolayout: Amodal indoor layout estimation</h1>
 
-[IROS 2022](https://ieeexplore.ieee.org/document/9982106) • [Project Website](https://indolayout.github.io) • [Paper PDF](https://drive.google.com/file/d/1E918al3PJ7f1jvyf4vB_PDy9r0SSq1GY/view?usp=sharing)
+<a href="https://ieeexplore.ieee.org/document/9982106" target="_blank" rel="noopener noreferrer">
+  <img src="https://img.shields.io/badge/Conference-green
+  " alt="Paper PDF">
+</a>
+<a href="https://drive.google.com/file/d/1E918al3PJ7f1jvyf4vB_PDy9r0SSq1GY/view?usp=sharing"><img src="https://img.shields.io/badge/PDF-orange
+" alt="PDF"></a>
+<a href="https://indolayout.github.io"><img src="https://img.shields.io/badge/Project%20Page-blue
+" alt="Project Page"></a>
 
+
+**[RRC, IIIT Hyderabad](https://robotics.iiit.ac.in/)**; **[TCS](https://www.tcs.com/what-we-do/research)**
+
+</div>
+
+## Overview
 IndoLayout is a lightweight and real-time deep learning model that estimates **amodal indoor layouts** from a single monocular RGB image. Unlike traditional methods that only detect visible occupancy, IndoLayout leverages **self-attention** and **adversarial learning** to predict the **hallucinated occupancy** of occluded spaces, enabling better mapping and planning for indoor robots.
 
 <p align="center">
   <img src="https://indolayout.github.io/resources/teaser.png" width="700"/>
 </p>
 
+## Description
 This repository contains the official implementation of IndoLayout, a method for extended indoor layout estimation from a single RGB image. IndoLayout leverages attention mechanisms to improve the accuracy and robustness of layout predictions in complex indoor scenes.
 
 ## Table of Contents
@@ -17,8 +31,8 @@ This repository contains the official implementation of IndoLayout, a method for
 - [Dataset Preparation](#dataset-preparation)
 - [Training](#training)
 - [Evaluation](#evaluation)
-- [Pretrained Models](#pretrained-models)
 - [Results](#results)
+- [Citation](#citation)
 - [License](#license)
 - [Acknowledgements](#acknowledgements)
 
@@ -102,7 +116,7 @@ You can then use the ```train_posenet.py``` script to run only evaluation.
 
 IndoLayout improves navigation success across difficulty levels without any depth input.
 
-## 🧪 Citation
+## Citation
 
 If you use IndoLayout in your research, please cite:
 
@@ -121,7 +135,7 @@ If you use IndoLayout in your research, please cite:
 ```
 
 ## License
-This project is licensed under the MIT License. See the LICENSE file for details.
+This project is licensed under the MIT License. See the [LICENSE]() file for details.
 
 
 ## Acknowledgements
