@@ -95,7 +95,7 @@ source bash_scripts/gibson4_exp.vars /home/$USER/gibson4_dataset /home$USER/gibs
 The main script for training the baseline models (Occupancy Anticipation RGB and RGB-D) is:
 
 ```bash
-train_posenet_bev.py train_occant_gibson4.yaml --script_mode train
+python3 train_posenet_bev.py train_occant_gibson4.yaml --script_mode train
 ```
 
 Please note that this runs both training on the train set and evaluation on the validation set.
@@ -106,7 +106,7 @@ You can find additional configs to train different baselines in the repository.
 To evaluate the same model, simply change the script_mode to 'val' as follows:
 
 ```bash
-train_posenet_bev.py train_occant_gibson4.yaml --script_mode val
+python3 train_posenet_bev.py train_occant_gibson4.yaml --script_mode val
 ```
 
 ## Indolayout
@@ -138,7 +138,7 @@ python3 train_disc.py --model_name attention_transformer_discr --data_path /home
 To evaluate the same model, simply change the script to 'eval.py' as follows:
 
 ```bash
-eval.py --model_name attention_transformer_discr --data_path /home/$USER/gibson4_dataset --split gibson4 --width 512 --height 512 --num_class 3 --type static --static_weight 1 --occ_map_size 128 --log_frequency 1 --log_root /home/$USER/basic_discr --load_weights_folder /home/$USER/basic_discr/epoch_100 --semantics_dir None --chandrakar_input_dir None --floor_path None --batch_size 8 --num_epochs 1 --bev_dir /home/$USER/gibson4_dataset/dilated_partialmaps --train_workers 0 --val_workers 8
+python3 eval.py --model_name attention_transformer_discr --data_path /home/$USER/gibson4_dataset --split gibson4 --width 512 --height 512 --num_class 3 --type static --static_weight 1 --occ_map_size 128 --log_frequency 1 --log_root /home/$USER/basic_discr --load_weights_folder /home/$USER/basic_discr/epoch_100 --semantics_dir None --chandrakar_input_dir None --floor_path None --batch_size 8 --num_epochs 1 --bev_dir /home/$USER/gibson4_dataset/dilated_partialmaps --train_workers 0 --val_workers 8
 ```
 
 ## Supplementary Material
@@ -187,7 +187,7 @@ If you use IndoLayout in your research, please cite:
 ```
 
 ## License
-This project is licensed under the MIT License. See the [LICENSE]() file for details.
+This project is licensed under the MIT License. See the [LICENSE](https://github.com/shantanusingh16/Indolayout/blob/main/LICENSE.txt) file for details.
 
 
 ## Acknowledgements
