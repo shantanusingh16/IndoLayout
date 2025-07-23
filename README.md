@@ -2,13 +2,10 @@
 <h1>Indolayout: Amodal indoor layout estimation</h1>
 
 <a href="https://ieeexplore.ieee.org/document/9982106" target="_blank" rel="noopener noreferrer">
-  <img src="https://img.shields.io/badge/Conference-green
-  " alt="Paper PDF">
+  <img src="https://img.shields.io/badge/Conference-green" alt="Paper PDF">
 </a>
-<a href="https://drive.google.com/file/d/1E918al3PJ7f1jvyf4vB_PDy9r0SSq1GY/view?usp=sharing"><img src="https://img.shields.io/badge/PDF-orange
-" alt="PDF"></a>
-<a href="https://indolayout.github.io"><img src="https://img.shields.io/badge/Project%20Page-blue
-" alt="Project Page"></a>
+<a href="https://drive.google.com/file/d/1E918al3PJ7f1jvyf4vB_PDy9r0SSq1GY/view?usp=sharing"><img src="https://img.shields.io/badge/PDF-orange" alt="PDF"></a>
+<a href="https://indolayout.github.io"><img src="https://img.shields.io/badge/Project%20Page-blue" alt="Project Page"></a>
 
 
 **[RRC, IIIT Hyderabad](https://robotics.iiit.ac.in/)**; **[TCS](https://www.tcs.com/what-we-do/research)**
@@ -29,8 +26,9 @@ This repository contains the official implementation of IndoLayout, a method for
 
 - [Installation](#installation)
 - [Dataset Preparation](#dataset-preparation)
-- [Training](#training)
-- [Evaluation](#evaluation)
+- [Baselines](#baselines-ans-and-occant)
+- [Indolayout](#indolayout)
+- [Supplementary](#supplementary-material)
 - [Results](#results)
 - [Citation](#citation)
 - [License](#license)
@@ -46,7 +44,7 @@ cd indoor-layout-estimation
 pip install -r requirements.txt
 ```
 
-## 🧠 Model Overview
+## Model Overview
 
 IndoLayout uses a combination of:
 - **ResNet-18 encoder** (pretrained on ImageNet)
@@ -74,28 +72,82 @@ The ```generate_habitat_data.py``` script in the repository is for getting a qui
 
 For generating datasets, please use the actual Habitat repositories here: [Github](!https://github.com/indolayout)
 
-## Training
-To train IndoLayout on your dataset, use one of the provided training scripts. For example:
+## Baselines (ANS and OccAnt)
+Please refer to the bash_scripts folder to see examples on how to train or evaluate the Indolayout model on different datasets.
 
-```sh
-bash train_posenet.sh
+### Environment variables
+To run the code, you need to setup environment variables, which can be done by sourcing the 'vars' file in bash_scripts folders. 
+
+<b>Pattern:</b>
+
+```bash
+source bash_scripts/gibson4_exp.vars {Dataset_dir} {Bev_dir} {Log_Dir} {Train_split_path} {Val_split_path}
 ```
 
-Or directly with Python:
 
-```sh
-python train_posenet.py--config configs/your_config.yaml
+<b>E.g.:</b>
+
+```bash
+source bash_scripts/gibson4_exp.vars /home/$USER/gibson4_dataset /home$USER/gibson4_dataset/bev_dir /home/$USER/indolayout_logs /home/$USER/indoor-layout-estimation-main/splits/gibson4/filtered_front_train_files.txt /home/$USER/indoor-layout-estimation-main/splits/gibson4/filtered_front_val_files.txt
+```
+
+### Training ANS RGB or Occant RGB/RGB-D
+The main script for training the baseline models (Occupancy Anticipation RGB and RGB-D) is:
+
+```bash
+train_posenet_bev.py train_occant_gibson4.yaml --script_mode train
 ```
 
 Please note that this runs both training on the train set and evaluation on the validation set.
 
 You can find additional configs to train different baselines in the repository.
 
-## Evaluation
-For evaluation, use the ``eval_*.yaml`` files in the configs directory. Alternatively, simply set the config ```PIPELINE.train=[]```  for the same result.
+### Evaluate ANS RGB or Occant RGB/RGB-D
+To evaluate the same model, simply change the script_mode to 'val' as follows:
 
-You can then use the ```train_posenet.py``` script to run only evaluation.
+```bash
+train_posenet_bev.py train_occant_gibson4.yaml --script_mode val
+```
 
+## Indolayout
+
+### Environment variables
+Similar to the baselines, to run the code, you need to setup environment variables, which can be done by sourcing the 'vars' file in bash_scripts folders. 
+
+<b>Pattern:</b>
+
+```bash
+source cross-view/gibson4_exp.vars {Dataset_dir} {Bev_dir} {Log_Dir} {Train_split_path} {Val_split_path}
+```
+
+
+<b>E.g.:</b>
+
+```bash
+source cross-view/gibson4_exp.vars /home/$USER/gibson4_dataset /home/$USER/gibson4_dataset/dilated_partialmaps /home/$USER/indolayout_logs /home/$USER/indoor-layout-estimation-main/splits/gibson4/filtered_front_train_files.txt /home/$USER/indoor-layout-estimation-main/splits/gibson4/filtered_front_val_files.txt
+```
+
+### Training Indolayout model
+The main script for training the indolayout model is:
+
+```bash
+python3 train_disc.py --model_name attention_transformer_discr --data_path /home/$USER/gibson4_dataset --split gibson4 --width 512 --height 512 --num_class 3 --type static --static_weight 1 --occ_map_size 128 --log_frequency 1 --log_root /home/$USER/basic_discr --save_path /home/$USER/basic_discr --semantics_dir None --chandrakar_input_dir None --floor_path None --batch_size 8 --num_epochs 100 --lr_steps 50 --lr 1e-4 --lr_transform 1e-3 --load_weights_folder None --bev_dir /home/$USER/gibson4_dataset/dilated_partialmaps --train_workers 15 --val_workers 8
+```
+
+### Evaluate Indolayout
+To evaluate the same model, simply change the script to 'eval.py' as follows:
+
+```bash
+eval.py --model_name attention_transformer_discr --data_path /home/$USER/gibson4_dataset --split gibson4 --width 512 --height 512 --num_class 3 --type static --static_weight 1 --occ_map_size 128 --log_frequency 1 --log_root /home/$USER/basic_discr --load_weights_folder /home/$USER/basic_discr/epoch_100 --semantics_dir None --chandrakar_input_dir None --floor_path None --batch_size 8 --num_epochs 1 --bev_dir /home/$USER/gibson4_dataset/dilated_partialmaps --train_workers 0 --val_workers 8
+```
+
+## Supplementary Material
+
+Refer to the notebooks folder to understand experiments and their implementations individually, in particular for:
+1. data_visualization
+2. generate_visible_occupancy
+3. photometric_reconstruction
+4. evaluate_bev
 
 ## Results
 ### Gibson 4+ (Validation)
@@ -139,4 +191,6 @@ This project is licensed under the MIT License. See the [LICENSE]() file for det
 
 
 ## Acknowledgements
-Developed at the [Robotics Research Center](https://robotics.iiit.ac.in/), IIIT-Hyderabad, in collaboration with TCS Research. Portions of the code may be adapted from other open-source projects. Please see individual files for attribution.
+Developed at the [Robotics Research Center](https://robotics.iiit.ac.in/), IIIT-Hyderabad, in collaboration with [TCS Research](https://www.tcs.com/what-we-do/research). 
+
+Thanks to these great repositories: [Neural-SLAM](https://github.com/devendrachaplot/Neural-SLAM), [Occupancy Anticipation](https://github.com/facebookresearch/OccupancyAnticipation), [Cross-View](https://github.com/JonDoe-297/cross-view) and many other inspiring works in the community.
